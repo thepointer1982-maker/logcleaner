@@ -4,6 +4,8 @@
 
 ### Fixed
 - Added `AGENTS.md` so Codex and other coding agents have repository-specific instructions.
+- Restored Codex recovery guidance and security guardrails in `AGENTS.md`.
+- Added `SECURITY.md` with the current hardening status and the remaining route/CSRF audit area.
 - Added a PHP lint workflow for pushes and pull requests.
 - Added localization JSON validation to the workflow.
 - Removed the duplicate `Settings#dellog` route.
