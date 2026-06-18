@@ -6,6 +6,7 @@
 - Added `AGENTS.md` so Codex and other coding agents have repository-specific instructions.
 - Added a PHP lint workflow for pushes and pull requests.
 - Removed the duplicate `Settings#dellog` route.
+- Removed the unimplemented `Settings#getLL` route because loglevel is already returned by `/getparam`.
 - Fixed app default handling so API responses return scalar values instead of nested `DataResponse` objects.
 - Hardened loglevel updates so invalid values are rejected before writing system config.
 - Removed undefined `$logid` references from filtered log methods.
