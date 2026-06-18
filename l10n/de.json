@@ -15,7 +15,7 @@
     "The weighting of an error is differentiated by the following background colors" : "Die Gewichtung eines Fehlers wird durch folgende Hintergrundfarben unterschieden",
     "Error Level 0: DEBUG: All activity; the most detailed logging." : "Error Level 0: DEBUG: Alle Aktivitäten; die detaillierteste Protokollierung.",
     "Error Level 1: INFO: Activity such as user logins and file activities, plus warnings, errors, and fatal errors." : "Error Level 1: INFO: Aktivitäten wie Benutzeranmeldungen und Dateiaktivitäten sowie Warnungen, Fehler und schwerwiegende Fehler.",
-    "Error Level 2: WARN: Operations succeed, but with warnings of potential problems, plus errors and fatal errors." : "Error Level 2: WARNUNG: Vorgänge sind erfolgreich, allerdings mit Warnungen vor potenziellen Problemen sowie Fehlern und schwerwiegende Fehlern.",
+    "Error Level 2: WARN: Operations succeed, but with warnings of potential problems, plus errors and fatal errors." : "Error Level 2: WARNUNG: Vorgänge sind erfolgreich, allerdings mit Warnungen vor potenziellen Problemen sowie Fehlern und schwerwiegenden Fehlern.",
     "Error Level 3: ERROR: An operation fails, but other services and operations continue, plus fatal errors." : "Error Level 3: FEHLER: Ein Vorgang schlägt fehl, andere Dienste und Vorgänge werden jedoch fortgesetzt, und es treten schwerwiegende Fehler auf.",
     "Error Level 4: FATAL: The server stops." : "Error Level 4: FATAL: Der Server stoppt.",
     "no log entries available" : "keine Logeinträge vorhanden",
