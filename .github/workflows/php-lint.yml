@@ -22,13 +22,9 @@ jobs:
           php-version: '8.1'
           coverage: none
 
-      - name: Run project checks
+      - name: Run from-start workflow
         run: |
-          bash repo-run.sh ci
-
-      - name: Build package manifest
-        run: |
-          bash repo-run.sh package-manifest
+          bash repo-run.sh from-start
 
       - name: Upload package artifacts
         uses: actions/upload-artifact@v4
@@ -38,4 +34,14 @@ jobs:
             build/logcleaner-*.tar.gz
             build/logcleaner-*.tar.gz.sha256
             build/logcleaner-*.contents.txt
+          if-no-files-found: error
+
+      - name: Upload planning artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: logcleaner-planning
+          path: |
+            build/planning/spec-plan.md
+            build/planning/improvement-backlog.md
+            build/planning/improvement-plan.md
           if-no-files-found: error
