@@ -17,6 +17,7 @@ Commands:
   json        Validate localization JSON files
   metadata    Validate app metadata XML invariants
   docs        Validate documentation invariants
+  release     Validate release readiness
   specs       Plan approved specs without executing them
 EOF
 }
@@ -79,6 +80,9 @@ PY
     ;;
   docs)
     bash tools/check-docs.sh
+    ;;
+  release)
+    bash tools/check-release.sh
     ;;
   specs)
     php tools/plan-specs.php
