@@ -20,6 +20,7 @@ Codex support is restored through this file and the GitHub Actions workflow in `
 
 Current validated guardrails:
 - PHP files are syntax-checked by CI with `php -l`.
+- Route definitions are validated by CI with `php tools/validate-routes.php`.
 - Localization JSON files are validated by CI with `python3 -m json.tool`.
 - Route/controller changes must be reviewed against `appinfo/routes.php` and `lib/Controller/*.php`.
 - App metadata changes must preserve app id, namespace, license, author metadata, and the supported Nextcloud range unless the task explicitly requires otherwise.
@@ -33,8 +34,8 @@ Primary agent responsibility:
 
 - Treat log deletion, duplicate deletion, empty-log, level deletion, app deletion, loglevel changes, and settings changes as administrative operations.
 - Validate all route parameters before using them.
-- Avoid adding `NoAdminRequired` or `NoCSRFRequired` to administrative or destructive endpoints unless there is a documented reason.
-- Destructive or mutating endpoints should move toward non-GET verbs with CSRF protection. If frontend compatibility blocks that change, document the blocker and keep the server-side validation strict.
+- Do not weaken administrative access rules for destructive or mutating endpoints unless there is a documented reason.
+- Destructive or mutating endpoints should move toward non-GET verbs with request-forgery protection. If frontend compatibility blocks that change, document the blocker and keep the server-side validation strict.
 - Prefer `DataResponse` payloads with scalar/array values. Do not return nested `DataResponse` objects as response values.
 - When setting defaults, write the default to app config and return the scalar default value to the frontend.
 - Use strict comparisons where practical and cast route parameters intentionally.
@@ -49,11 +50,12 @@ Run or reason through these checks for changed PHP files:
 php -l path/to/changed.php
 ```
 
-For route/controller changes, inspect:
+For route/controller changes, inspect and run:
 
 ```bash
 appinfo/routes.php
 lib/Controller/*.php
+php tools/validate-routes.php
 ```
 
 For metadata changes, inspect:
@@ -83,5 +85,5 @@ occ app:check-code logcleaner
 - Loglevel changes must reject values outside `0..4` and must not write invalid system config.
 - Duplicate route entries should be avoided.
 - Filter methods should not reference undefined variables.
-- UI calls that delete or mutate logs should be reviewed carefully for method, CSRF, and admin-only behavior.
+- UI calls that delete or mutate logs should be reviewed carefully for method, request-forgery protection, and admin-only behavior.
 - Minified frontend bundles should not be hand-edited unless no source is available and the change is small, reviewed, and tested.
