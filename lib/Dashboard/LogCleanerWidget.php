@@ -29,28 +29,23 @@ declare(strict_types=1);
 namespace OCA\LogCleaner\Dashboard;
 
 use OCP\AppFramework\Services\IInitialState;
-use OCP\Dashboard\IAPIWidget;
-use OCP\IL10N;
-
 use OCP\Dashboard\IAPIWidgetV2;
+use OCP\Dashboard\IConditionalWidget;
 use OCP\Dashboard\Model\WidgetItems;
 use OCP\Dashboard\Model\WidgetItem;
-use OCP\Dashboard\IConditionalWidget;
-use OCP\IURLGenerator;
 use OCP\IConfig;
-use OCP\IUserSession;
 use OCP\IGroupManager;
-
-use OCA\LogCleaner\AppInfo\Application;
+use OCP\IL10N;
+use OCP\IURLGenerator;
+use OCP\IUserSession;
 use OCP\Util;
-	
-	#[\AllowDynamicProperties]
-	class LogCleanerWidget implements IAPIWidgetV2, IConditionalWidget {
 
-	private $l10n;
-	private $config;
-	private $initialStateService;
-	private $userId;
+class LogCleanerWidget implements IAPIWidgetV2, IConditionalWidget {
+	private IL10N $l10n;
+	private IConfig $config;
+	private IInitialState $initialStateService;
+	private ?string $userId;
+	private bool $wtisadmin = false;
 
 	public function __construct(
 		IL10N $l10n,
@@ -59,17 +54,20 @@ use OCP\Util;
 		IUserSession $userSession,
 		IGroupManager $groupManager,
 		IInitialState $initialStateService,
-		?string $userId) {
-			$this->l10n = $l10n;
-			$this->config = $config;
-			$this->initialStateService = $initialStateService;
-			$this->userId = $userId;
-			$user = $userSession->getUser();
+		?string $userId
+	) {
+		$this->l10n = $l10n;
+		$this->config = $config;
+		$this->initialStateService = $initialStateService;
+		$this->userId = $userId;
+		$user = $userSession->getUser();
+		if ($user !== null) {
 			$this->wtisadmin = $groupManager->isAdmin($user->getUID());
+		}
 	}
 
 	public function isEnabled(): bool {
-		return $this->wtisadmin ? true : false;
+		return $this->wtisadmin;
 	}
 
 	public function getId(): string {
@@ -101,96 +99,99 @@ use OCP\Util;
 	}
 
 	public function getItems(string $userId, int $limit = 7): array {
-		$wtlogfile = $this->config->getSystemValue('logfile');
-		if (!file_exists($wtlogfile)) {
-			$wtlogfile = $this->config->getSystemValue('datadirectory') . '/nextcloud.log';
-		}
+		$wtlogfile = $this->getLogFile();
+		$logFileLabel = $wtlogfile !== '' ? $wtlogfile : $this->l10n->t('log file cannot be located');
 		$logcleaneritems = [];
-				$logcleaneritems[] = new WidgetItem(
-				$wtlogfile,
-				$this->show_filesize($wtlogfile,2),
-				$this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('logcleaner.page.index')),
-				$this->urlGenerator->imagePath('logcleaner', 'icon-file.png'),
-				''
-			);
-			$logcleaneritems[] = new WidgetItem(
-				$this->l10n->n('%n log entry', '%n log entries', $this->getAll()),
-				'',
-				$this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('logcleaner.page.index')),
-				$this->urlGenerator->imagePath('logcleaner', 'logcleaner.png'),
-				''
-			);
-			$logcleaneritems[] = new WidgetItem(
-				$this->l10n->n('%n duplicate', '%n duplicates', $this->countDub()),
-				'',
-				$this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('logcleaner.page.index')),
-				$this->urlGenerator->imagePath('logcleaner', 'logcleaner.png'),
-				''
-			);
-			return $logcleaneritems;
+		$logcleaneritems[] = new WidgetItem(
+			$logFileLabel,
+			$this->show_filesize($wtlogfile, 2),
+			$this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('logcleaner.page.index')),
+			$this->urlGenerator->imagePath('logcleaner', 'icon-file.png'),
+			''
+		);
+		$logcleaneritems[] = new WidgetItem(
+			$this->l10n->n('%n log entry', '%n log entries', $this->getAll()),
+			'',
+			$this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('logcleaner.page.index')),
+			$this->urlGenerator->imagePath('logcleaner', 'logcleaner.png'),
+			''
+		);
+		$logcleaneritems[] = new WidgetItem(
+			$this->l10n->n('%n duplicate', '%n duplicates', $this->countDub()),
+			'',
+			$this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('logcleaner.page.index')),
+			$this->urlGenerator->imagePath('logcleaner', 'logcleaner.png'),
+			''
+		);
+		return $logcleaneritems;
 	}
 
 	public function getItemsV2(string $userId, ?string $since = null, int $limit = 7): WidgetItems {
 		$items = $this->getItems($userId, $limit);
 		return new WidgetItems(
 			$items,
-			count($items) === 0 ? '' : '',
+			'',
 		);
 	}
 
+	private function getLogFile(): string {
+		$wtlogfile = (string)$this->config->getSystemValue('logfile');
+		if ($wtlogfile !== '' && is_file($wtlogfile)) {
+			return $wtlogfile;
+		}
+
+		$fallback = (string)$this->config->getSystemValue('datadirectory') . '/nextcloud.log';
+		if (is_file($fallback)) {
+			return $fallback;
+		}
+
+		return '';
+	}
+
 	public function show_filesize($filename, $decimalplaces = 0) {
-	  $size = filesize($filename);
-	  $sizes = array('B', 'kB', 'MB', 'GB', 'TB');
-	  for ($i=0; $size > 1024 && $i < count($sizes) - 1; $i++) {
-	     $size /= 1024;
-	  }
-	  return round($size, $decimalplaces).' '.$sizes[$i];
+		if ($filename === '' || !is_file($filename)) {
+			return '0 B';
+		}
+		$size = filesize($filename);
+		if ($size === false) {
+			return '0 B';
+		}
+		$sizes = array('B', 'kB', 'MB', 'GB', 'TB');
+		for ($i=0; $size > 1024 && $i < count($sizes) - 1; $i++) {
+			$size /= 1024;
+		}
+		return round($size, $decimalplaces).' '.$sizes[$i];
 	}
 
 	public function getAll() {
-		$wtlogfile = $this->config->getSystemValue('logfile');
-		if (!file_exists($wtlogfile)) {
-			$wtlogfile = $this->config->getSystemValue('datadirectory') . '/nextcloud.log';
-		}
-		$wwt = $this->wtlogtoarr($wtlogfile);
-		$wtlogfilezeilen = count($wwt);
-		return $wtlogfilezeilen;
+		$wwt = $this->wtlogtoarr($this->getLogFile());
+		return count($wwt);
 	}
 
-	public function wtlogtoarr(?string $wtlog)
+	public function wtlogtoarr(?string $wtlog): array
 	{
-			if ($wtlog === null) {
-					$wtlog = "";
-					return;
-			}
-			return file("$wtlog");
+		if ($wtlog === null || $wtlog === '' || !is_readable($wtlog)) {
+			return [];
+		}
+		$lines = file($wtlog);
+		return $lines === false ? [] : $lines;
 	}
 
 	public function countDub() {
-		$i = 0;
-		$ii = 0;
-		$tmp_array = array();
-		$key_array = array();
-		$temp_array = array();
-		$wtlogfile = $this->config->getSystemValue('logfile');
-		if (!file_exists($wtlogfile)) {
-			$wtlogfile = $this->config->getSystemValue('datadirectory') . '/nextcloud.log';
-		}
-		$wwt = $this->wtlogtoarr($wtlogfile);
-		foreach ($wwt as $value) {
-			$tmp_array[] = explode(',"', $value);
-		}
-		unset($value);
-		foreach($tmp_array as $val) {
-			if (!in_array($val[8], $key_array)) {
-				$key_array[$i] = $val[8];
-				$temp_array[$i] = $i;
-      }
-			else {
-				$ii++;
+		$messages = [];
+		$duplicates = 0;
+		foreach ($this->wtlogtoarr($this->getLogFile()) as $value) {
+			$json = json_decode($value, true);
+			if (!is_array($json) || !array_key_exists('message', $json)) {
+				continue;
 			}
-      $i++;
-    }
-		return $ii;
+			$message = (string)$json['message'];
+			if (isset($messages[$message])) {
+				$duplicates++;
+				continue;
+			}
+			$messages[$message] = true;
+		}
+		return $duplicates;
 	}
 }
