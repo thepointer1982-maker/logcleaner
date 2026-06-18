@@ -25,3 +25,14 @@ jobs:
       - name: Run project checks
         run: |
           bash repo-run.sh ci
+
+      - name: Build and validate package
+        run: |
+          bash repo-run.sh package-check
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: logcleaner-package
+          path: build/logcleaner-*.tar.gz
+          if-no-files-found: error
