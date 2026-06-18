@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This workflow applies the repository process from the beginning in a repeatable order. It does not implement every idea automatically. It validates the project, plans work, ranks improvements, checks release readiness, and builds the package manifest.
+This workflow applies the repository process from the beginning in a repeatable order. It does not implement every idea automatically. It validates the project, plans work, ranks improvements, checks release readiness, builds the package manifest, and verifies installation readiness artifacts.
 
 ## Command
 
@@ -19,6 +19,7 @@ This workflow applies the repository process from the beginning in a repeatable 
 5. Full project checks
 6. Release readiness
 7. Package manifest generation
+8. Installation readiness
 
 ## Planning outputs
 
@@ -40,9 +41,14 @@ The workflow also builds package outputs under `build/`:
 
 CI uploads these files as the `logcleaner-package` artifact.
 
+## Installation readiness
+
+The workflow validates that installation documentation exists, package files exist, the checksum verifies, and the contents list includes required runtime entries. It does not copy files to a server or enable the app.
+
 ## Rules
 
 - This workflow is safe orchestration, not automatic feature implementation.
+- Installation remains a local administrator action.
 - Risky or destructive features still need a focused spec first.
 - Controller and frontend changes must remain separate reviewable patches.
 - Generated frontend bundles must not be edited by hand.
@@ -50,4 +56,4 @@ CI uploads these files as the `logcleaner-package` artifact.
 
 ## Expected outcome
 
-A successful run means the repository is internally consistent, has an updated planning view, passes project checks, passes release readiness, and can build package artifacts with checksum and contents list.
+A successful run means the repository is internally consistent, has an updated planning view, passes project checks, passes release readiness, can build package artifacts with checksum and contents list, and is ready for manual local installation review.
