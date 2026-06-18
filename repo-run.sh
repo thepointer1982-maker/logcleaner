@@ -16,6 +16,8 @@ Commands:
   routes      Validate route targets
   json        Validate localization JSON files
   metadata    Validate app metadata XML invariants
+  docs        Validate documentation invariants
+  specs       Plan approved specs without executing them
 EOF
 }
 
@@ -74,6 +76,12 @@ if nextcloud.attrib.get('min-version') != '31' or nextcloud.attrib.get('max-vers
 
 print('appinfo/info.xml OK')
 PY
+    ;;
+  docs)
+    bash tools/check-docs.sh
+    ;;
+  specs)
+    php tools/plan-specs.php
     ;;
   *)
     echo "Unknown command: $command" >&2
