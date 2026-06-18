@@ -5,6 +5,10 @@
 ### Fixed
 - Added `AGENTS.md` so Codex and other coding agents have repository-specific instructions.
 - Added `.github/copilot-instructions.md` so GitHub coding agents point back to `AGENTS.md`.
+- Added `CLAUDE.md` as a concise project map for coding agents and maintainers.
+- Added `repo-run.sh` as the unified local and CI command runner.
+- Added `tools/check-all.sh` as the complete project validation suite.
+- Added architecture, review, onboarding, validation, security, gitignore, and retrospective documents adapted for this Nextcloud app.
 - Restored Codex recovery guidance and security guardrails in `AGENTS.md`.
 - Added route target validation with `tools/validate-routes.php`.
 - Added route validation to the GitHub Actions workflow.
