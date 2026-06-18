@@ -26,13 +26,16 @@ jobs:
         run: |
           bash repo-run.sh ci
 
-      - name: Build and validate package
+      - name: Build package manifest
         run: |
-          bash repo-run.sh package-check
+          bash repo-run.sh package-manifest
 
-      - name: Upload package artifact
+      - name: Upload package artifacts
         uses: actions/upload-artifact@v4
         with:
           name: logcleaner-package
-          path: build/logcleaner-*.tar.gz
+          path: |
+            build/logcleaner-*.tar.gz
+            build/logcleaner-*.tar.gz.sha256
+            build/logcleaner-*.contents.txt
           if-no-files-found: error
