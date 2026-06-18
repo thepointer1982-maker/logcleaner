@@ -18,6 +18,7 @@ Commands:
   metadata    Validate app metadata XML invariants
   docs        Validate documentation invariants
   release     Validate release readiness
+  package     Build a Nextcloud app archive
   specs       Plan approved specs without executing them
 EOF
 }
@@ -83,6 +84,9 @@ PY
     ;;
   release)
     bash tools/check-release.sh
+    ;;
+  package)
+    bash tools/package-app.sh
     ;;
   specs)
     php tools/plan-specs.php
