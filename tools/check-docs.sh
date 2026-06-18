@@ -15,6 +15,7 @@ required_files=(
   "docs/FROM_START_WORKFLOW.md"
   "docs/INSTALL.md"
   "docs/OPTIMIZATION.md"
+  "docs/PREVIEW.md"
   "commands/review.md"
   "commands/onboard.md"
   "commands/fix-change.md"
@@ -24,12 +25,15 @@ required_files=(
   "tools/plan-specs.php"
   "tools/generate-improvement-backlog.php"
   "tools/plan-improvements.php"
+  "tools/preview-cleanup.php"
+  "tools/check-preview.php"
   "tools/run-from-start.sh"
   "tools/check-install-readiness.sh"
   "tools/check-release.sh"
   "tools/package-app.sh"
   "tools/check-package.sh"
   "tools/package-manifest.sh"
+  "tests/fixtures/logs/basic.log"
 )
 
 missing=0
@@ -101,6 +105,21 @@ fi
 
 if ! grep -q "Optimization plan" docs/OPTIMIZATION.md; then
   echo "docs/OPTIMIZATION.md must document optimization" >&2
+  exit 1
+fi
+
+if ! grep -q "Cleanup preview" docs/PREVIEW.md; then
+  echo "docs/PREVIEW.md must document cleanup preview" >&2
+  exit 1
+fi
+
+if ! grep -q "writes_performed" tools/preview-cleanup.php; then
+  echo "tools/preview-cleanup.php must report writes_performed" >&2
+  exit 1
+fi
+
+if ! grep -q "Cleanup preview checks OK" tools/check-preview.php; then
+  echo "tools/check-preview.php must validate cleanup preview" >&2
   exit 1
 fi
 
