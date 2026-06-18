@@ -24,6 +24,7 @@ Commands:
   backlog          Generate 250 improvement candidates
   improvements     Rank next improvement candidates
   specs            Plan approved specs without executing them
+  from-start       Run the complete from-start workflow
 EOF
 }
 
@@ -106,6 +107,9 @@ PY
     ;;
   specs)
     php tools/plan-specs.php
+    ;;
+  from-start)
+    bash tools/run-from-start.sh
     ;;
   *)
     echo "Unknown command: $command" >&2
