@@ -60,4 +60,7 @@ PY
 echo "Checking documentation invariants..."
 bash tools/check-docs.sh
 
+echo "Checking release readiness..."
+bash tools/check-release.sh
+
 echo "All checks passed."
