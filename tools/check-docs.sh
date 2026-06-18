@@ -8,6 +8,7 @@ required_files=(
   "docs/ARCHITECTURE.md"
   "docs/SPEC_WORKFLOW.md"
   "docs/OPERATIONS.md"
+  "docs/RELEASE.md"
   "commands/review.md"
   "commands/onboard.md"
   "commands/fix-change.md"
@@ -15,6 +16,7 @@ required_files=(
   "rules/validation.md"
   "repo-run.sh"
   "tools/plan-specs.php"
+  "tools/check-release.sh"
 )
 
 missing=0
@@ -51,6 +53,11 @@ fi
 
 if ! grep -q "Nextcloud" docs/OPERATIONS.md; then
   echo "docs/OPERATIONS.md must document Nextcloud operations" >&2
+  exit 1
+fi
+
+if ! grep -q "repo-run.sh release" docs/RELEASE.md; then
+  echo "docs/RELEASE.md must document repo-run.sh release" >&2
   exit 1
 fi
 
