@@ -18,10 +18,10 @@ This checklist keeps LogCleaner releases reproducible and safe.
    ./repo-run.sh release
    ```
 
-3. Build the app package:
+3. Build and validate the app package:
 
    ```bash
-   ./repo-run.sh package
+   ./repo-run.sh package-check
    ```
 
 4. Verify app metadata:
@@ -36,7 +36,7 @@ This checklist keeps LogCleaner releases reproducible and safe.
    - `CHANGELOG.md` contains a section for the release version.
    - `SECURITY.md` mentions the current repair line.
    - `docs/OPERATIONS.md` still matches deployment expectations.
-   - `docs/PACKAGING.md` describes the package contents.
+   - `docs/PACKAGING.md` describes the package contents and validation.
 
 6. Verify security-sensitive behavior:
 
@@ -47,7 +47,7 @@ This checklist keeps LogCleaner releases reproducible and safe.
 
 ## Packaging notes
 
-Package only the app files needed by Nextcloud. Do not include local secrets, temporary files, development logs, or private environment files. The packaging command stages runtime app paths under `build/package/logcleaner` and writes the archive to `build/logcleaner-<version>.tar.gz`.
+Package only the app files needed by Nextcloud. Do not include local secrets, temporary files, development logs, or private environment files. The packaging command stages runtime app paths under `build/package/logcleaner` and writes the archive to `build/logcleaner-<version>.tar.gz`. The package-check command verifies required runtime entries and rejects development-only paths.
 
 ## After tagging
 
