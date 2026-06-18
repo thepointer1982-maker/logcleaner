@@ -1,0 +1,30 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs and runtime artifacts
+*.log
+*.tmp
+*.bak
+
+# Dependencies and build artifacts
+node_modules/
+vendor/
+build/
+dist/
+coverage/
+
+# Nextcloud app packages
+*.tar.gz
+*.zip
+
+# Local environment and secrets
+.env
+.env.*
+secrets/
+*.pem
+*.key
