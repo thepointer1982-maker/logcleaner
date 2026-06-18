@@ -25,6 +25,16 @@ The repository can generate a 250-item improvement backlog locally:
 
 This output is exploratory. It is not an implementation plan until individual items are promoted into focused specs.
 
+## Ranked next candidates
+
+The repository can rank the next improvement candidates:
+
+```bash
+./repo-run.sh improvements
+```
+
+The ranking uses value, risk, and effort to produce a next-safe-step table. It is a planning aid, not an automatic implementation decision.
+
 ## Candidate matrix
 
 | Candidate | Value | Risk | First safe slice |
@@ -103,7 +113,8 @@ Use `docs/HARDWARE_PLANNING.md` to choose a focused, standard, or extended local
 ## Next work
 
 1. Generate the 250-item backlog with `./repo-run.sh backlog`.
-2. Promote only high-value items into specs.
-3. Keep new specs small enough for focused review.
-4. Prefer helper-level prototypes and validation tools before controller mutation.
-5. Run `./repo-run.sh ci` before merging any implementation.
+2. Rank candidates with `./repo-run.sh improvements`.
+3. Promote only high-value items into specs.
+4. Keep new specs small enough for focused review.
+5. Prefer helper-level prototypes and validation tools before controller mutation.
+6. Run `./repo-run.sh ci` before merging any implementation.
