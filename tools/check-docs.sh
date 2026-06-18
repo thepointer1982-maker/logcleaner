@@ -10,6 +10,7 @@ required_files=(
   "docs/OPERATIONS.md"
   "docs/RELEASE.md"
   "docs/PACKAGING.md"
+  "docs/FEATURE_EXPLORATION.md"
   "commands/review.md"
   "commands/onboard.md"
   "commands/fix-change.md"
@@ -67,6 +68,11 @@ fi
 
 if ! grep -q "repo-run.sh package-manifest" docs/PACKAGING.md; then
   echo "docs/PACKAGING.md must document repo-run.sh package-manifest" >&2
+  exit 1
+fi
+
+if ! grep -q "Feature exploration" docs/FEATURE_EXPLORATION.md; then
+  echo "docs/FEATURE_EXPLORATION.md must document feature exploration" >&2
   exit 1
 fi
 
