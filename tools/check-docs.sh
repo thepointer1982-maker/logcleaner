@@ -91,6 +91,16 @@ if ! grep -q "repo-run.sh from-start" docs/FROM_START_WORKFLOW.md; then
   exit 1
 fi
 
+if ! grep -q "logcleaner-planning" docs/FROM_START_WORKFLOW.md; then
+  echo "docs/FROM_START_WORKFLOW.md must document planning artifacts" >&2
+  exit 1
+fi
+
+if ! grep -q "logcleaner-package" docs/FROM_START_WORKFLOW.md; then
+  echo "docs/FROM_START_WORKFLOW.md must document package artifacts" >&2
+  exit 1
+fi
+
 if ! grep -q "Generated 250 improvement backlog" tools/generate-improvement-backlog.php; then
   echo "tools/generate-improvement-backlog.php must generate the 250-item backlog" >&2
   exit 1
