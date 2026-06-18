@@ -25,3 +25,7 @@ jobs:
       - name: Lint PHP files
         run: |
           find . -type f -name '*.php' -print0 | xargs -0 -n 1 php -l
+
+      - name: Validate localization JSON
+        run: |
+          find l10n -type f -name '*.json' -print0 | xargs -0 -n 1 python3 -m json.tool > /dev/null
