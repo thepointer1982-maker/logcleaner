@@ -6,11 +6,15 @@ required_files=(
   "CLAUDE.md"
   "SECURITY.md"
   "docs/ARCHITECTURE.md"
+  "docs/SPEC_WORKFLOW.md"
+  "docs/OPERATIONS.md"
   "commands/review.md"
   "commands/onboard.md"
+  "commands/fix-change.md"
   "rules/security.md"
   "rules/validation.md"
   "repo-run.sh"
+  "tools/plan-specs.php"
 )
 
 missing=0
@@ -37,6 +41,16 @@ fi
 
 if ! grep -q "LogCleaner" docs/ARCHITECTURE.md; then
   echo "docs/ARCHITECTURE.md must describe LogCleaner" >&2
+  exit 1
+fi
+
+if ! grep -q "repo-run.sh specs" docs/SPEC_WORKFLOW.md; then
+  echo "docs/SPEC_WORKFLOW.md must document repo-run.sh specs" >&2
+  exit 1
+fi
+
+if ! grep -q "Nextcloud" docs/OPERATIONS.md; then
+  echo "docs/OPERATIONS.md must document Nextcloud operations" >&2
   exit 1
 fi
 
