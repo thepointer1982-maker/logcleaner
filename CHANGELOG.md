@@ -11,6 +11,8 @@
 - Added `tools/check-all.sh` as the complete project validation suite.
 - Added `tools/check-docs.sh` to keep required project guidance files present and connected.
 - Added `tools/plan-specs.php` and `spec-priorities.csv.example` for safe, non-executing spec planning.
+- Added `tools/package-app.sh` and `docs/PACKAGING.md` for reproducible Nextcloud app archives.
+- Added packaging checks to the release readiness flow.
 - Added `docs/SPEC_WORKFLOW.md` to document manual spec prioritization.
 - Added `docs/OPERATIONS.md` with deployment and network-boundary guidance for Nextcloud use.
 - Added architecture, review, onboarding, validation, security, gitignore, and retrospective documents adapted for this Nextcloud app.
