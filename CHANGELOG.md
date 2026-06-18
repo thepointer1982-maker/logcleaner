@@ -12,6 +12,8 @@
 - Added `tools/check-docs.sh` to keep required project guidance files present and connected.
 - Added `tools/plan-specs.php` and `spec-priorities.csv.example` for safe, non-executing spec planning.
 - Added `tools/package-app.sh` and `docs/PACKAGING.md` for reproducible Nextcloud app archives.
+- Added `tools/check-package.sh` and `repo-run.sh package-check` to validate archive contents.
+- Added CI package artifact upload after validated package builds.
 - Added packaging checks to the release readiness flow.
 - Added `docs/SPEC_WORKFLOW.md` to document manual spec prioritization.
 - Added `docs/OPERATIONS.md` with deployment and network-boundary guidance for Nextcloud use.
