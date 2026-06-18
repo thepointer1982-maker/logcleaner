@@ -57,6 +57,9 @@ if nextcloud.attrib.get('min-version') != '31' or nextcloud.attrib.get('max-vers
 print(f'appinfo/info.xml OK for logcleaner {version}')
 PY
 
+echo "Checking cleanup preview..."
+php tools/check-preview.php
+
 echo "Checking documentation invariants..."
 bash tools/check-docs.sh
 
