@@ -11,6 +11,7 @@ required_files=(
   "docs/RELEASE.md"
   "docs/PACKAGING.md"
   "docs/FEATURE_EXPLORATION.md"
+  "docs/HARDWARE_PLANNING.md"
   "commands/review.md"
   "commands/onboard.md"
   "commands/fix-change.md"
@@ -18,6 +19,7 @@ required_files=(
   "rules/validation.md"
   "repo-run.sh"
   "tools/plan-specs.php"
+  "tools/generate-improvement-backlog.php"
   "tools/check-release.sh"
   "tools/package-app.sh"
   "tools/check-package.sh"
@@ -73,6 +75,16 @@ fi
 
 if ! grep -q "Feature exploration" docs/FEATURE_EXPLORATION.md; then
   echo "docs/FEATURE_EXPLORATION.md must document feature exploration" >&2
+  exit 1
+fi
+
+if ! grep -q "Hardware planning" docs/HARDWARE_PLANNING.md; then
+  echo "docs/HARDWARE_PLANNING.md must document hardware planning" >&2
+  exit 1
+fi
+
+if ! grep -q "Generated 250 improvement backlog" tools/generate-improvement-backlog.php; then
+  echo "tools/generate-improvement-backlog.php must generate the 250-item backlog" >&2
   exit 1
 fi
 
