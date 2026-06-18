@@ -9,18 +9,19 @@ usage() {
 Usage: ./repo-run.sh <command>
 
 Commands:
-  help          Show this help
-  check         Run the complete project validation suite
-  ci            Alias for check
-  lint          Run PHP syntax checks
-  routes        Validate route targets
-  json          Validate localization JSON files
-  metadata      Validate app metadata XML invariants
-  docs          Validate documentation invariants
-  release       Validate release readiness
-  package       Build a Nextcloud app archive
-  package-check Build and validate a Nextcloud app archive
-  specs         Plan approved specs without executing them
+  help             Show this help
+  check            Run the complete project validation suite
+  ci               Alias for check
+  lint             Run PHP syntax checks
+  routes           Validate route targets
+  json             Validate localization JSON files
+  metadata         Validate app metadata XML invariants
+  docs             Validate documentation invariants
+  release          Validate release readiness
+  package          Build a Nextcloud app archive
+  package-check    Build and validate a Nextcloud app archive
+  package-manifest Build, validate, checksum, and list package contents
+  specs            Plan approved specs without executing them
 EOF
 }
 
@@ -91,6 +92,9 @@ PY
     ;;
   package-check)
     bash tools/check-package.sh
+    ;;
+  package-manifest)
+    bash tools/package-manifest.sh
     ;;
   specs)
     php tools/plan-specs.php
