@@ -22,6 +22,7 @@ Commands:
   package-check    Build and validate a Nextcloud app archive
   package-manifest Build, validate, checksum, and list package contents
   backlog          Generate 250 improvement candidates
+  improvements     Rank next improvement candidates
   specs            Plan approved specs without executing them
 EOF
 }
@@ -99,6 +100,9 @@ PY
     ;;
   backlog)
     php tools/generate-improvement-backlog.php
+    ;;
+  improvements)
+    php tools/plan-improvements.php
     ;;
   specs)
     php tools/plan-specs.php
