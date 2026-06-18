@@ -9,6 +9,7 @@ required_files=(
   "docs/SPEC_WORKFLOW.md"
   "docs/OPERATIONS.md"
   "docs/RELEASE.md"
+  "docs/PACKAGING.md"
   "commands/review.md"
   "commands/onboard.md"
   "commands/fix-change.md"
@@ -17,6 +18,7 @@ required_files=(
   "repo-run.sh"
   "tools/plan-specs.php"
   "tools/check-release.sh"
+  "tools/package-app.sh"
 )
 
 missing=0
@@ -58,6 +60,11 @@ fi
 
 if ! grep -q "repo-run.sh release" docs/RELEASE.md; then
   echo "docs/RELEASE.md must document repo-run.sh release" >&2
+  exit 1
+fi
+
+if ! grep -q "repo-run.sh package" docs/PACKAGING.md; then
+  echo "docs/PACKAGING.md must document repo-run.sh package" >&2
   exit 1
 fi
 
