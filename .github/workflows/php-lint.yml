@@ -24,4 +24,4 @@ jobs:
 
       - name: Run project checks
         run: |
-          bash tools/check-all.sh
+          bash repo-run.sh ci
