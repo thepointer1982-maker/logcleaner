@@ -28,71 +28,59 @@ declare(strict_types=1);
 
 namespace OCA\LogCleaner\Dashboard;
 
-use OCA\LogCleaner\AppInfo\Application;
-use OCP\Dashboard\IWidget;
 use OCP\Dashboard\IConditionalWidget;
+use OCP\Dashboard\IWidget;
 use OCP\IConfig;
+use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IURLGenerator;
-use OCP\Util;
 use OCP\IUserSession;
-use OCP\IGroupManager;
+use OCP\Util;
 
-#[\AllowDynamicProperties]
 class LogCleanerWidget2 implements IWidget, IConditionalWidget
 {
-  public function __construct(private IL10N $l10n,
-  private IURLGenerator $url,
-  private IConfig $config,
-  IUserSession $userSession,
-  IGroupManager $groupManager,
-) {
-  $user = $userSession->getUser();
-  $this->wtisadmin = $groupManager->isAdmin($user->getUID());
-}
+	private bool $wtisadmin = false;
 
-public function isEnabled(): bool {
-  return $this->wtisadmin ? true : false;
-}
+	public function __construct(
+		private IL10N $l10n,
+		private IURLGenerator $url,
+		private IConfig $config,
+		IUserSession $userSession,
+		IGroupManager $groupManager,
+	) {
+		$user = $userSession->getUser();
+		if ($user !== null) {
+			$this->wtisadmin = $groupManager->isAdmin($user->getUID());
+		}
+	}
 
-/**
- * @inheritDoc
- */
-public function getId(): string {
-  return 'logcleaner-widget2';
-}
+	public function isEnabled(): bool {
+		return $this->wtisadmin;
+	}
 
-/**
- * @inheritDoc
- */
-public function getTitle(): string {
-  return $this->l10n->t('LogCleaner 2');
-}
+	public function getId(): string {
+		return 'logcleaner-widget2';
+	}
 
-/**
- * @inheritDoc
- */
-public function getOrder(): int {
-  return 10;
-}
+	public function getTitle(): string {
+		return $this->l10n->t('LogCleaner 2');
+	}
 
-/**
- * @inheritDoc
- */
-public function getIconClass(): string {
-  return 'icon-logcleaner';
-}
+	public function getOrder(): int {
+		return 10;
+	}
 
-/**
- * @inheritDoc
- */
-public function getUrl(): ?string {
-  return null;
-}
+	public function getIconClass(): string {
+		return 'icon-logcleaner';
+	}
 
-    public function load(): void
-    {
-        Util::addScript('logcleaner', 'logcleaner-widget');
-        Util::addStyle('logcleaner', 'logcleaner-widget');
-    }
+	public function getUrl(): ?string {
+		return null;
+	}
+
+	public function load(): void
+	{
+		Util::addScript('logcleaner', 'logcleaner-widget');
+		Util::addStyle('logcleaner', 'logcleaner-widget');
+	}
 }
