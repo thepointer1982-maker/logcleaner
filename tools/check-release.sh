@@ -9,6 +9,7 @@ required_files=(
   "docs/RELEASE.md"
   "docs/PACKAGING.md"
   "tools/package-app.sh"
+  "tools/check-package.sh"
   "lib/AppInfo/Application.php"
   "lib/Controller/SettingsController.php"
   "lib/Controller/Helper.php"
@@ -65,8 +66,8 @@ if ! grep -q "<nextcloud min-version=\"31\" max-version=\"33\"" appinfo/info.xml
   exit 1
 fi
 
-if ! grep -q "repo-run.sh package" docs/PACKAGING.md; then
-  echo "docs/PACKAGING.md must document package command" >&2
+if ! grep -q "repo-run.sh package-check" docs/PACKAGING.md; then
+  echo "docs/PACKAGING.md must document package validation command" >&2
   exit 1
 fi
 
