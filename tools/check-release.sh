@@ -7,6 +7,8 @@ required_files=(
   "CHANGELOG.md"
   "SECURITY.md"
   "docs/RELEASE.md"
+  "docs/PACKAGING.md"
+  "tools/package-app.sh"
   "lib/AppInfo/Application.php"
   "lib/Controller/SettingsController.php"
   "lib/Controller/Helper.php"
@@ -60,6 +62,11 @@ fi
 
 if ! grep -q "<nextcloud min-version=\"31\" max-version=\"33\"" appinfo/info.xml; then
   echo "appinfo/info.xml must keep Nextcloud compatibility range 31..33" >&2
+  exit 1
+fi
+
+if ! grep -q "repo-run.sh package" docs/PACKAGING.md; then
+  echo "docs/PACKAGING.md must document package command" >&2
   exit 1
 fi
 
