@@ -41,7 +41,6 @@ return [
     ['name' => 'Settings#logapps', 'url' => '/logapps', 'verb' => 'GET'],
     ['name' => 'Settings#dellog', 'url' => '/dellog/{logid}', 'verb' => 'GET'],
     ['name' => 'Settings#delLevel', 'url' => '/delLevel/{level}', 'verb' => 'GET'],
-    ['name' => 'Settings#dellog', 'url' => '/dellog/{logid}', 'verb' => 'GET'],
     ['name' => 'Settings#setSettingZeilen', 'url' => '/setlines/{who}/{zeilen}', 'verb' => 'GET'],
     ['name' => 'Settings#logfileandsize', 'url' => '/logfileandsize', 'verb' => 'GET'],
     ['name' => 'Settings#getcntll', 'url' => '/getcntll', 'verb' => 'GET'],
