@@ -30,37 +30,45 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 namespace OCA\LogCleaner\Cron;
 
 use OCA\LogCleaner\Controller\SettingsController;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
-use Psr\Log\LoggerInterface;
 use OCP\IAppConfig;
+use Psr\Log\LoggerInterface;
+use Throwable;
 
 class Cleanup extends TimedJob {
 	private LoggerInterface $logger;
-    private SettingsController $setcon;
+	private SettingsController $setcon;
 
-	public function __construct(ITimeFactory $time,
-		LoggerInterface $logger, SettingsController $setcon, private IAppConfig $appConfig,) {
+	public function __construct(
+		ITimeFactory $time,
+		LoggerInterface $logger,
+		SettingsController $setcon,
+		private IAppConfig $appConfig,
+	) {
 		parent::__construct($time);
 		$this->logger = $logger;
-        $this->setcon = $setcon;
-		$this->setInterval(3600*24);
-		$this->appconfig = $appConfig;
+		$this->setcon = $setcon;
+		$this->setInterval(3600 * 24);
 	}
 
 	/**
 	 * @param array $argument
 	 */
 	protected function run($argument): void {
-		$wtpara_cron_deldub = (int)$this->appconfig->getValueString('logcleaner', 'wtpara_cron_deldub', '9', false);
-		if($wtpara_cron_deldub ===2) {
-        $this->setcon->delDub();
-        $this->logger->debug('LogCleaner background job executed!');
+		$wtpara_cron_deldub = (int)$this->appConfig->getValueString('logcleaner', 'wtpara_cron_deldub', '1', false);
+		if ($wtpara_cron_deldub !== 2) {
+			return;
+		}
+
+		try {
+			$this->setcon->delDub();
+			$this->logger->debug('LogCleaner background job executed!');
+		} catch (Throwable $e) {
+			$this->logger->error('LogCleaner background job failed: ' . $e->getMessage(), ['app' => 'logcleaner']);
 		}
 	}
 }
