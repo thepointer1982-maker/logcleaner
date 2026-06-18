@@ -18,20 +18,27 @@ This checklist keeps LogCleaner releases reproducible and safe.
    ./repo-run.sh release
    ```
 
-3. Verify app metadata:
+3. Build the app package:
+
+   ```bash
+   ./repo-run.sh package
+   ```
+
+4. Verify app metadata:
 
    - `appinfo/info.xml` has the intended `<version>`.
    - App id remains `logcleaner`.
    - Namespace remains `LogCleaner`.
    - Supported Nextcloud range remains `31..33` unless intentionally changed.
 
-4. Verify documentation:
+5. Verify documentation:
 
    - `CHANGELOG.md` contains a section for the release version.
    - `SECURITY.md` mentions the current repair line.
    - `docs/OPERATIONS.md` still matches deployment expectations.
+   - `docs/PACKAGING.md` describes the package contents.
 
-5. Verify security-sensitive behavior:
+6. Verify security-sensitive behavior:
 
    - Destructive and mutating operations remain administrator operations.
    - Route parameters are validated before use.
@@ -40,10 +47,10 @@ This checklist keeps LogCleaner releases reproducible and safe.
 
 ## Packaging notes
 
-Package only the app files needed by Nextcloud. Do not include local secrets, temporary files, development logs, or private environment files.
+Package only the app files needed by Nextcloud. Do not include local secrets, temporary files, development logs, or private environment files. The packaging command stages runtime app paths under `build/package/logcleaner` and writes the archive to `build/logcleaner-<version>.tar.gz`.
 
 ## After tagging
 
 - Confirm CI is green for the tag or release commit.
-- Confirm the release archive does not contain `.env`, `secrets/`, local logs, or temporary files.
+- Confirm the release archive does not contain local-only development files.
 - Keep a rollback path: backups or the previous working app package should remain available before production rollout.
