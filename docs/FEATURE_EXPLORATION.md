@@ -15,6 +15,16 @@ Feature candidates are evaluated by:
 - testability through `./repo-run.sh ci`
 - whether the feature can be introduced without hand-editing generated frontend bundles
 
+## Generated backlog
+
+The repository can generate a 250-item improvement backlog locally:
+
+```bash
+./repo-run.sh backlog
+```
+
+This output is exploratory. It is not an implementation plan until individual items are promoted into focused specs.
+
 ## Candidate matrix
 
 | Candidate | Value | Risk | First safe slice |
@@ -86,9 +96,14 @@ Acceptance direction:
 
 Retention policies and cleanup audit trail should wait until controller route hardening and CSRF/post-route migration are completed. They touch destructive operations and should not be implemented as a broad first change.
 
+## Hardware-aware exploration
+
+Use `docs/HARDWARE_PLANNING.md` to choose a focused, standard, or extended local test profile. Stronger hardware can justify larger synthetic fixtures and repeated package checks, but it does not approve risky controller changes.
+
 ## Next work
 
-1. Convert the highest-value candidates into specs.
-2. Keep new specs small enough for focused review.
-3. Prefer helper-level prototypes and validation tools before controller mutation.
-4. Run `./repo-run.sh ci` before merging any implementation.
+1. Generate the 250-item backlog with `./repo-run.sh backlog`.
+2. Promote only high-value items into specs.
+3. Keep new specs small enough for focused review.
+4. Prefer helper-level prototypes and validation tools before controller mutation.
+5. Run `./repo-run.sh ci` before merging any implementation.
