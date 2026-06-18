@@ -16,12 +16,14 @@ Important project facts:
 
 ## Codex recovery status
 
-Codex support is restored through this file and the GitHub Actions workflow in `.github/workflows/php-lint.yml`.
+Codex support is restored through this file, `CLAUDE.md`, `.github/copilot-instructions.md`, and the GitHub Actions workflow in `.github/workflows/php-lint.yml`.
 
 Current validated guardrails:
-- PHP files are syntax-checked by CI with `php -l`.
-- Route definitions are validated by CI with `php tools/validate-routes.php`.
-- Localization JSON files are validated by CI with `python3 -m json.tool`.
+- The unified local and CI entry point is `./repo-run.sh ci`.
+- PHP files are syntax-checked with `php -l`.
+- Route definitions are validated with `php tools/validate-routes.php`.
+- Localization JSON files are validated with `python3 -m json.tool`.
+- App metadata XML is parsed and checked for app id, namespace, version, and supported Nextcloud range.
 - Route/controller changes must be reviewed against `appinfo/routes.php` and `lib/Controller/*.php`.
 - App metadata changes must preserve app id, namespace, license, author metadata, and the supported Nextcloud range unless the task explicitly requires otherwise.
 
@@ -44,10 +46,16 @@ Primary agent responsibility:
 
 ## Common checks before finishing
 
-Run or reason through these checks for changed PHP files:
+Run the full project check before finishing whenever possible:
 
 ```bash
-php -l path/to/changed.php
+./repo-run.sh ci
+```
+
+For focused PHP checks, run:
+
+```bash
+./repo-run.sh lint
 ```
 
 For route/controller changes, inspect and run:
@@ -55,20 +63,19 @@ For route/controller changes, inspect and run:
 ```bash
 appinfo/routes.php
 lib/Controller/*.php
-php tools/validate-routes.php
+./repo-run.sh routes
 ```
 
-For metadata changes, inspect:
+For metadata changes, run:
 
 ```bash
-appinfo/info.xml
+./repo-run.sh metadata
 ```
 
-For localization changes, inspect and validate:
+For localization changes, run:
 
 ```bash
-l10n/*.json
-python3 -m json.tool l10n/de.json > /dev/null
+./repo-run.sh json
 ```
 
 If a Nextcloud dev instance is available, also verify:
