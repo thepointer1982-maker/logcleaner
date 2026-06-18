@@ -20,6 +20,26 @@ This workflow applies the repository process from the beginning in a repeatable 
 6. Release readiness
 7. Package manifest generation
 
+## Planning outputs
+
+The workflow writes planning artifacts under `build/planning/`:
+
+- `spec-plan.md`
+- `improvement-backlog.md`
+- `improvement-plan.md`
+
+CI uploads these files as the `logcleaner-planning` artifact.
+
+## Package outputs
+
+The workflow also builds package outputs under `build/`:
+
+- `logcleaner-<version>.tar.gz`
+- `logcleaner-<version>.tar.gz.sha256`
+- `logcleaner-<version>.contents.txt`
+
+CI uploads these files as the `logcleaner-package` artifact.
+
 ## Rules
 
 - This workflow is safe orchestration, not automatic feature implementation.
