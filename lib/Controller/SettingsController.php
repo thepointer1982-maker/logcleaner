@@ -65,29 +65,42 @@ class SettingsController extends Controller {
 			'wert' => $zeilen,
             ]);
 	}
+
+	private function getAppValueWithDefault(string $key, $default) {
+		$value = $this->config->getAppValue('logcleaner', $key);
+		if ($value === '' || $value === null) {
+			$this->config->setAppValue('logcleaner', $key, (string)$default);
+			return $default;
+		}
+		return $value;
+	}
 	
 	public function getAppValueZ(): DataResponse {
 		return new DataResponse([
-			'logcleaner_wt_zeilen' => (empty($this->config->getAppValue('logcleaner', 'logcleaner_wt_zeilen')))?$this->setSettingZeilen('logcleaner_wt_zeilen',5):$this->config->getAppValue('logcleaner', 'logcleaner_wt_zeilen'),
-			'wtpara_settings_am' => (empty($this->config->getAppValue('logcleaner', 'wtpara_settings_am')))?$this->setSettingZeilen('wtpara_settings_am',2):$this->config->getAppValue('logcleaner', 'wtpara_settings_am'),
-			'logcleaner_wt_offset' => (empty($this->config->getAppValue('logcleaner', 'logcleaner_wt_offset')))?$this->setSettingZeilen('logcleaner_wt_offset',0):$this->config->getAppValue('logcleaner', 'logcleaner_wt_offset'),
-			'logcleaner_wt_characters' => (empty($this->config->getAppValue('logcleaner', 'logcleaner_wt_characters')))?$this->setSettingZeilen('logcleaner_wt_characters',500):$this->config->getAppValue('logcleaner', 'logcleaner_wt_characters'),
-			'wtparam_menue' => (empty($this->config->getAppValue('logcleaner', 'wtparam_menue')))?$this->setSettingZeilen('wtparam_menue',2):$this->config->getAppValue('logcleaner', 'wtparam_menue'),
-			'wtparam_logmessage' => (empty($this->config->getAppValue('logcleaner', 'wtparam_logmessage')))?$this->setSettingZeilen('wtparam_logmessage',1):$this->config->getAppValue('logcleaner', 'wtparam_logmessage'),
-			'wtparam_filter' => (empty($this->config->getAppValue('logcleaner', 'wtparam_filter')))?$this->setSettingZeilen('wtparam_filter',1):$this->config->getAppValue('logcleaner', 'wtparam_filter'),
-			'wtpara_cron_deldub' => (empty($this->config->getAppValue('logcleaner', 'wtpara_cron_deldub')))?$this->setSettingZeilen('wtpara_cron_deldub',1):$this->config->getAppValue('logcleaner', 'wtpara_cron_deldub'),
+			'logcleaner_wt_zeilen' => $this->getAppValueWithDefault('logcleaner_wt_zeilen', 5),
+			'wtpara_settings_am' => $this->getAppValueWithDefault('wtpara_settings_am', 2),
+			'logcleaner_wt_offset' => $this->getAppValueWithDefault('logcleaner_wt_offset', 0),
+			'logcleaner_wt_characters' => $this->getAppValueWithDefault('logcleaner_wt_characters', 500),
+			'wtparam_menue' => $this->getAppValueWithDefault('wtparam_menue', 2),
+			'wtparam_logmessage' => $this->getAppValueWithDefault('wtparam_logmessage', 1),
+			'wtparam_filter' => $this->getAppValueWithDefault('wtparam_filter', 1),
+			'wtpara_cron_deldub' => $this->getAppValueWithDefault('wtpara_cron_deldub', 1),
 			'loglevel' => $this->config->getSystemValue('loglevel'),
-			'wtpara_show_footer' => (empty($this->config->getAppValue('logcleaner', 'wtpara_show_footer')))?$this->setSettingZeilen('wtpara_show_footer',1):$this->config->getAppValue('logcleaner', 'wtpara_show_footer'),
+			'wtpara_show_footer' => $this->getAppValueWithDefault('wtpara_show_footer', 1),
             ]);
 	}
 
 	public function setLL($who): DataResponse {
-		$who = intval($who);
-		if (!is_int($who) || $who < 0 || $who > 4) {
-				$this->logger->debug('Cannot set loglevel');
-			}
-			$this->config->setSystemValue('loglevel', $who);
+		$who = filter_var($who, FILTER_VALIDATE_INT);
+		if ($who === false || $who < 0 || $who > 4) {
+			$this->logger->debug('Cannot set loglevel');
 			return new DataResponse([
+				'error' => 'invalid loglevel',
+            ], Http::STATUS_BAD_REQUEST);
+		}
+		$this->config->setSystemValue('loglevel', $who);
+		return new DataResponse([
+			'loglevel' => $who,
             ]);
 	}
 
@@ -318,10 +331,6 @@ class SettingsController extends Controller {
 			$wt_characters = 500;
 			$this->helper->setAppValue('logcleaner_wt_characters', 500);
 		}
-		if (isset($logid)) {
-			$this->helper->wtzeileweg($logid, $wwt, $wtlogfile);
-			$wwt = $this->helper->wtlogtoarr($wtlogfile);
-		}
 		$wtlogfilezeilen = count($wwt);
 		if ($wtlogfilezeilen == 0) {
 			$obja = new \stdClass();
@@ -418,10 +427,6 @@ class SettingsController extends Controller {
 			$wt_characters = 500;
 			$this->helper->setAppValue('logcleaner_wt_characters', 500);
 		}
-		if (isset($logid)) {
-			$this->helper->wtzeileweg($logid, $wwt, $wtlogfile);
-			$wwt = $this->helper->wtlogtoarr($wtlogfile);
-		}
 		$wtlogfilezeilen = count($wwt);
 		if ($wtlogfilezeilen == 0) {
 			$obja = new \stdClass();
@@ -482,6 +487,7 @@ class SettingsController extends Controller {
 			$obja = new \stdClass();
 			$obja->file = '';
 			$obja->filearr = [];
+			$obja->appversion = '';
 			$obja->filesize = '';
 		}
 	return new DataResponse([
