@@ -1,0 +1,5 @@
+{"level":"warning","app":"files","message":"Synthetic warning event"}
+{"level":"error","app":"dav","message":"Synthetic dav event"}
+{"level":"warning","app":"files","message":"Synthetic warning event"}
+not-json
+{"level":"info","app":"logcleaner","message":"Synthetic info event"}
