@@ -13,6 +13,8 @@ required_files=(
   "docs/FEATURE_EXPLORATION.md"
   "docs/HARDWARE_PLANNING.md"
   "docs/FROM_START_WORKFLOW.md"
+  "docs/INSTALL.md"
+  "docs/OPTIMIZATION.md"
   "commands/review.md"
   "commands/onboard.md"
   "commands/fix-change.md"
@@ -23,6 +25,7 @@ required_files=(
   "tools/generate-improvement-backlog.php"
   "tools/plan-improvements.php"
   "tools/run-from-start.sh"
+  "tools/check-install-readiness.sh"
   "tools/check-release.sh"
   "tools/package-app.sh"
   "tools/check-package.sh"
@@ -88,6 +91,16 @@ fi
 
 if ! grep -q "repo-run.sh from-start" docs/FROM_START_WORKFLOW.md; then
   echo "docs/FROM_START_WORKFLOW.md must document repo-run.sh from-start" >&2
+  exit 1
+fi
+
+if ! grep -q "Installation readiness" docs/INSTALL.md; then
+  echo "docs/INSTALL.md must document installation readiness" >&2
+  exit 1
+fi
+
+if ! grep -q "Optimization plan" docs/OPTIMIZATION.md; then
+  echo "docs/OPTIMIZATION.md must document optimization" >&2
   exit 1
 fi
 
