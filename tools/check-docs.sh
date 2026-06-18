@@ -19,6 +19,7 @@ required_files=(
   "tools/plan-specs.php"
   "tools/check-release.sh"
   "tools/package-app.sh"
+  "tools/check-package.sh"
 )
 
 missing=0
@@ -63,8 +64,8 @@ if ! grep -q "repo-run.sh release" docs/RELEASE.md; then
   exit 1
 fi
 
-if ! grep -q "repo-run.sh package" docs/PACKAGING.md; then
-  echo "docs/PACKAGING.md must document repo-run.sh package" >&2
+if ! grep -q "repo-run.sh package-check" docs/PACKAGING.md; then
+  echo "docs/PACKAGING.md must document repo-run.sh package-check" >&2
   exit 1
 fi
 
