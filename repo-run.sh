@@ -21,6 +21,7 @@ Commands:
   package          Build a Nextcloud app archive
   package-check    Build and validate a Nextcloud app archive
   package-manifest Build, validate, checksum, and list package contents
+  backlog          Generate 250 improvement candidates
   specs            Plan approved specs without executing them
 EOF
 }
@@ -95,6 +96,9 @@ PY
     ;;
   package-manifest)
     bash tools/package-manifest.sh
+    ;;
+  backlog)
+    php tools/generate-improvement-backlog.php
     ;;
   specs)
     php tools/plan-specs.php
