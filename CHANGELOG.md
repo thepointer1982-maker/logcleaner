@@ -11,6 +11,7 @@
 - Removed undefined `$logid` references from filtered log methods.
 - Hardened helper log reading, single-line deletion, and JSON log parsing.
 - Added fallback values for log metadata responses when the log file is missing.
+- Fixed the cleanup cron job to use the injected app config service and log failures safely.
 
 ## 1.3.5
 
